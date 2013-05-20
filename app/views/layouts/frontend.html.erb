@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WeatherOrNot</title>
+  <%= stylesheet_link_tag    "application", :media => "all" %>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+
+<div class="container">
+	<div class="row">
+		<div class="span6 offset3">
+<h1 class="text-center">Weather or Not</h1>
+<%= yield %>
+</div>
+</div>
+</div>
+  <%= javascript_include_tag "application" %>
+
+</body>
+</html>

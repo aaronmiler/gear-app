@@ -1,0 +1,86 @@
+<h2>Location: 
+<%= @search['address_components'].select{ |x| x['types'] == ['locality','political']}.first['short_name'] %>,
+<% unless @search['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']} %> 
+	<%= @search['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']}.first['short_name'] %>
+<% else %>
+	<%= @search['address_components'].select{ |x| x['types'] == ['country','political']}.first['short_name'] %>
+<% end %>
+</h2>
+<div id="map-canvas"></div>
+<a href="/">Go Again</a>
+<% if session[:times] %>
+	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
+	<% session[:times].each do |array, t| %>
+		<div class="result">
+			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
+			<!-- # Calculations going on here, setting variables and what no to get data -->			
+			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
+			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
+			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
+			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
+			<%= @date.today? ? 'Today:' : 'Day of:' %> 
+				<ul>
+					<li>Summary: <%= today.summary %></li>
+					<li>Temperature: <%= today.temperature.round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= today.windSpeed %> MPH</li>
+					<li>Icon: <%= today.icon %></li>
+				</ul>
+			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
+				<ul>
+					<li>Summary: <%= yesterday.summary %></li>
+					<li>Temperature: <%= yesterday.temperature.round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
+					<li>Icon: <%= yesterday.icon %></li>
+				</ul>
+		</div>
+		<br/><br/>
+		<% end %>
+<% else %>
+	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
+	<% params[:times].each do |array, t| %>
+		<div class="result">
+			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
+			<!-- # Calculations going on here, setting variables and what no to get data -->			
+			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
+			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
+			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
+			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
+			<%= @date.today? ? 'Today:' : 'Day of:' %> 
+				<ul>
+					<li>Summary: <%= today.summary %></li>
+					<li>Temperature: <%= today.temperature.round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= today.windSpeed %> MPH</li>
+					<li>Icon: <%= today.icon %></li>
+				</ul>
+			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
+				<ul>
+					<li>Summary: <%= yesterday.summary %></li>
+					<li>Temperature: <%= yesterday.temperature.round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
+					<li>Icon: <%= yesterday.icon %></li>
+				</ul>
+		</div>
+		<br/><br/>
+	<% end %>
+	<%= @forecast.hourly.data.first.to_json %>
+<% end %>
+
+<script>
+	var map;
+	function initialize() {
+	  var mapOptions = {
+	    zoom: 8,
+	    center: new google.maps.LatLng(<%= @search['geometry']['location']['lat'] %>, <%= @search['geometry']['location']['lng'] %>),
+	    mapTypeId: google.maps.MapTypeId.ROADMAP
+	  };
+	  map = new google.maps.Map(document.getElementById('map-canvas'),
+	      mapOptions);
+	}
+
+	initialize();
+
+</script>
