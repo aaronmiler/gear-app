@@ -3,7 +3,7 @@ class FrontendController < ApplicationController
 	require 'Time'
 	require 'ostruct'
 	require 'tzinfo'
-	Forecast::IO.api_key = '492624da029f2818994d4c71db8b7fa9'
+	Forecast::IO.api_key = ENV['FORECAST_KEY']
 
 
 	def index
