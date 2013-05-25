@@ -1,6 +1,7 @@
 class FrontendController < ApplicationController
 	require 'forecast_io'
 	require 'Time'
+	require 'ostruct'
 	require 'tzinfo'
 	Forecast::IO.api_key = '492624da029f2818994d4c71db8b7fa9'
 
@@ -50,6 +51,8 @@ class FrontendController < ApplicationController
 			@search['geometry']['location']['lng'],
 			time: @date-1.day
 		)
+		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
+
 	end
 	def multiple_results
 		@locations = session[:results]

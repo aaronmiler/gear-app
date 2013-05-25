@@ -6,7 +6,7 @@
 	<%= @search['address_components'].select{ |x| x['types'] == ['country','political']}.first['short_name'] %>
 <% end %>
 </h2>
-<div id="map-canvas"></div>
+<div id="map-canvas" style="width:100%;height:250px;"></div>
 <a href="/">Go Again</a>
 <% if session[:times] %>
 	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
@@ -18,6 +18,7 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
+
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today.summary %></li>
@@ -47,6 +48,10 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : @gear.goggles = false %>
+			<% today.windSpeed > 5 ? @gear.wind = true : @gear.wind = false %>
+			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : @gear.sunglasses = false %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today.summary %></li>
@@ -66,14 +71,19 @@
 		</div>
 		<br/><br/>
 	<% end %>
-	<%= @forecast.hourly.data.first.to_json %>
 <% end %>
-
+<div style="position:fixed;left:0;top:25px;width:250px;padding:10px;">
+	<h3>You should bring</h3>
+	<%= @gear.rain ? "<h5>Rain Gear</h5>".html_safe : "" %>
+	<%= @gear.goggles ? "<h5>Goggles</h5>".html_safe : "" %>
+	<%= @gear.wind ? "<h5>Windproof Apparael</h5>".html_safe : "" %>
+	<%= @gear.sunglasses ? "<h5>Sunglasses</h5>".html_safe : "" %>
+</div>
 <script>
 	var map;
 	function initialize() {
 	  var mapOptions = {
-	    zoom: 8,
+	    zoom: 13,
 	    center: new google.maps.LatLng(<%= @search['geometry']['location']['lat'] %>, <%= @search['geometry']['location']['lng'] %>),
 	    mapTypeId: google.maps.MapTypeId.ROADMAP
 	  };

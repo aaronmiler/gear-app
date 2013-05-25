@@ -1,5 +1,10 @@
 $('body').on('blur','#location',function(){
-	console.log('hello')
+	if($(this).val() != ''){
+		$("#submit-btn").removeAttr('disabled')
+	}
+	else {
+		$("#submit-btn").attr('disabled','disabled')
+	}
 })
 $("[data-behaviour~='datepicker']").datepicker({
     "format": "yyyy-mm-dd",
