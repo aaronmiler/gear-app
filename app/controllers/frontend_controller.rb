@@ -1,6 +1,5 @@
 class FrontendController < ApplicationController
 	require 'forecast_io'
-	require 'Time'
 	require 'ostruct'
 	require 'tzinfo'
 	Forecast::IO.api_key = ENV['FORECAST_KEY']

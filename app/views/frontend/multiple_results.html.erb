@@ -1,9 +1,9 @@
 <% @locations.each do |loc| %>
 	<% location = loc.data['address_components'].select{ |x| x['types'] == ['locality','political']}.first['short_name'] %>
 	<% if loc.data['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']} %> 
-		Unless - <%=  location += " " + loc.data['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']}.first['short_name'] %>
+		<%  location += " " + loc.data['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']}.first['short_name'] %>
 	<% else %>
-		Else - <%= location += " " + loc.data['address_components'].select{ |x| x['types'] == ['country','political']}.first['short_name'] %>
+		<% location += " " + loc.data['address_components'].select{ |x| x['types'] == ['country','political']}.first['short_name'] %>
 	<% end %>
 	<%= link_to loc.data['formatted_address'], :action => "results", :location => location %><br/>
 <% end %>
