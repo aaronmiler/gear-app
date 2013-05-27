@@ -56,13 +56,13 @@
 			<% @todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i } %>
 			<% @yesterdayLoop = @yesterday.hourly.data.select{ |x| x["time"] == (@timeLoop-1.day).to_i } %>
 			<% puts "------------------- Rain"%>
-				<% @todayLoop["precipProbability"].to_f*100 > 50 %>
+				<% @todayLoop.precipProbability.to_f*100 > 50 %>
 				<% puts "------------------- Goggles"%>
-				<% @todayLoop["precipProbability"].to_f*100 > 50 %>
+				<% @todayLoop.precipProbability.to_f*100 > 50 %>
 				<% puts "------------------- Wind"%>
-				<% @todayLoop["windSpeed"] > 5 %>
+				<% @todayLoop.windSpeed > 5 %>
 				<% puts "------------------- Sunglasses"%>
-				<% @todayLoop["cloudCover"].to_f*100 < 40 %>
+				<% @todayLoop.cloudCover.to_f*100 < 40 %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= @todayLoop["summary"] %></li>
