@@ -59,5 +59,6 @@ module WeatherOrNot
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
+    Forecast::IO.api_key = ENV["FORECAST_KEY"]
   end
 end
