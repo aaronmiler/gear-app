@@ -15,7 +15,7 @@
 			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
 			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time =  Time.parse(@date.change({:hour => hour}).to_s).round(1.hour) %>
+			<% time =  @date.change({:hour => hour}).to_time.round(1.hour) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
 			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
@@ -49,7 +49,7 @@
 			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
 			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time =  Time.parse(@date.change({:hour => hour}).to_s).round(1.hour) %>
+			<% time =  @date.change({:hour => hour}).to_time.round(1.hour) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
 			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
