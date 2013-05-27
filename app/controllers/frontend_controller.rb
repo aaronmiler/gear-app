@@ -31,9 +31,9 @@ class FrontendController < ApplicationController
 			@date = DateTime.parse(session[:date]).midnight
 		else
 			if params[:date][:date] != ""
-				@date = DateTime.parse(params[:date][:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.parse(params[:date][:date]).midnight
 			else
-				@date = DateTime.now.new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.now.midnight
 			end
 			@times = params[:times]
 		end
