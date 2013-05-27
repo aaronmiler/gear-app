@@ -53,9 +53,9 @@ class FrontendController < ApplicationController
 
 		params[:times].each do |array, t|
 			@hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i
-			@timeLoop =  @date.change({:hour => @hourLoop, :min => 00, :sec => 00})
-			@todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i }
-			render json: {time: @timeLoop.to_i , forecast: @forecast}
+			@timeLoop =  @date.change({:hour => @hourLoop, :min => 00, :sec => 00}).to_i + 1
+			@todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop }
+			render json: {time: @timeLoop , forecast: @forecast}
 		end
 	end
 	def multiple_results
