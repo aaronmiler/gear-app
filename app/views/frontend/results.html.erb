@@ -44,17 +44,20 @@
 <% else %>
 	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
 	<% params[:times].each do |array, t| %>
-	<% puts "---------------------------" %>
-	<% puts array %>
-	<% puts t %>
-	<% puts "---------------------------" %>
+	<% puts "--------------------------- Loop Start" %>
 		<div class="result">
+	<% puts "--------------------------- Display Time" %>
 			Time: <%= t["h"] %> <%= t["ampm"] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
+	<% puts "--------------------------- Calculate Hour" %>
 			<% hour = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
+			<% puts "--------------------------- Calculate Time" %>
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
+			<% puts "--------------------------- Get Today " %>
 			<% today = @forecast.hourly.data.select{ |x| x["time"] == time.to_i }.first %>
+			<% puts "--------------------------- Get Yesterday " %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
+			<% puts "--------------------------- Gear Checks" %>
 			<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
 			<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
 			<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
