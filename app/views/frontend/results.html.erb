@@ -18,12 +18,10 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-			<% if today %>
 				<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
 				<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : @gear.goggles = false %>
 				<% today.windSpeed > 5 ? @gear.wind = true : @gear.wind = false %>
 				<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : @gear.sunglasses = false %>
-
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today.summary %></li>
@@ -43,7 +41,6 @@
 		</div>
 		<br/><br/>
 		<% end %>
-		<% end %>
 <% else %>
 	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
 	<% params[:times].each do |array, t| %>
@@ -54,7 +51,6 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-			<% if today %>
 			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
 			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : @gear.goggles = false %>
 			<% today.windSpeed > 5 ? @gear.wind = true : @gear.wind = false %>
@@ -77,7 +73,6 @@
 				</ul>
 		</div>
 		<br/><br/>
-		<% end %>
 	<% end %>
 <% end %>
 <div style="position:fixed;left:0;top:25px;width:250px;padding:10px;">
