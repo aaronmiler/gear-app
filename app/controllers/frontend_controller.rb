@@ -50,7 +50,7 @@ class FrontendController < ApplicationController
 			time: @date-1.day
 		)
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
-		render json: @forecast.hourly.data.select{ |x| x['time'] == 1369562400 }.first 
+		render json: @forecast.hourly.data.select{ |x| x['time'] == 1369562400 }.first['visibility']
 	end
 	def multiple_results
 		@locations = session[:results]
