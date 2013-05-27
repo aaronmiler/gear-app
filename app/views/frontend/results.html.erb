@@ -18,10 +18,10 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x["time"] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
-				<% today["precipProbability"].to_f*100 > 50 ? @gear["rain"] = true : '' %>
-				<% today["precipProbability"].to_f*100 > 50 ? @gear["goggles"] = true : '' %>
-				<% today["windSpeed"] > 5 ? @gear["wind"] = true : '' %>
-				<% today["cloudCover"].to_f*100 < 40 ? @gear["sunglasses"] = true : '' %>
+				<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
+				<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
+				<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
+				<% today["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today["summary"] %></li>
@@ -51,10 +51,10 @@
 			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
 			<% today = @forecast.hourly.data.select{ |x| x["time"] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
-			<% today["precipProbability"].to_f*100 > 50 ? @gear["rain"] = true : '' %>
-			<% today["precipProbability"].to_f*100 > 50 ? @gear["goggles"] = true : '' %>
-			<% today["windSpeed"] > 5 ? @gear["wind"] = true : '' %>
-			<% today["cloudCover"].to_f*100 < 40 ? @gear["sunglasses"] = true : '' %>
+			<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
+			<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
+			<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
+			<% today["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today["summary"] %></li>
@@ -77,10 +77,10 @@
 <% end %>
 <div style="position:fixed;left:0;top:25px;width:250px;padding:10px;">
 	<h3>You should bring</h3>
-	<%= @gear["rain"] ? "<h5>Rain Gear</h5>".html_safe : "" %>
-	<%= @gear["goggles"] ? "<h5>Goggles</h5>".html_safe : "" %>
-	<%= @gear["wind"] ? "<h5>Windproof Apparael</h5>".html_safe : "" %>
-	<%= @gear["sunglasses"] ? "<h5>Sunglasses</h5>".html_safe : "" %>
+	<%= @gear.rain ? "<h5>Rain Gear</h5>".html_safe : "" %>
+	<%= @gear.goggles ? "<h5>Goggles</h5>".html_safe : "" %>
+	<%= @gear.wind ? "<h5>Windproof Apparael</h5>".html_safe : "" %>
+	<%= @gear.sunglasses ? "<h5>Sunglasses</h5>".html_safe : "" %>
 </div>
 <script>
 	var map;
