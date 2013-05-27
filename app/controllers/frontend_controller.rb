@@ -51,7 +51,7 @@ class FrontendController < ApplicationController
 			@search['geometry']['location']['lng'],
 			time: @date-1.day
 		)
-		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
+		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
 
 	end
 	def multiple_results
