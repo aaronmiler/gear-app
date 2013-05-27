@@ -1,9 +1,9 @@
 <h2>Location: 
-<%= @search["address_components"].select{ |x| x["types"] == ["locality','political"]}.first["short_name"] %>,
-<% unless @search["address_components"].select{ |x| x["types"] == ["administrative_area_level_1','political"]} %> 
-	<%= @search["address_components"].select{ |x| x["types"] == ["administrative_area_level_1','political"]}.first["short_name"] %>
+<%= @search["address_components"].select{ |x| x["types"] == ["locality","political"]}.first["short_name"] %>,
+<% unless @search["address_components"].select{ |x| x["types"] == ["administrative_area_level_1","political"]} %> 
+	<%= @search["address_components"].select{ |x| x["types"] == ["administrative_area_level_1","political"]}.first["short_name"] %>
 <% else %>
-	<%= @search["address_components"].select{ |x| x["types"] == ["country','political"]}.first["short_name"] %>
+	<%= @search["address_components"].select{ |x| x["types"] == ["country","political"]}.first["short_name"] %>
 <% end %>
 </h2>
 <div id="map-canvas" style="width:100%;height:250px;"></div>
