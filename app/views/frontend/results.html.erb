@@ -44,6 +44,10 @@
 <% else %>
 	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
 	<% params[:times].each do |array, t| %>
+	<% puts "---------------------------" %>
+	<% puts array %>
+	<% puts t %>
+	<% puts "---------------------------" %>
 		<div class="result">
 			Time: <%= t["h"] %> <%= t["ampm"] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
