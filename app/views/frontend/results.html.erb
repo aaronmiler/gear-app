@@ -58,7 +58,7 @@
 			<% puts "--------------------------- Get Yesterday " %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
 			<% puts "--------------------------- Gear Checks" %>
-			<% puts today %>
+			<% puts today.to_json %>
 			<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
 			<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
 			<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
