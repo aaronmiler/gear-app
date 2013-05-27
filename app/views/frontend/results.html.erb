@@ -14,29 +14,29 @@
 		<div class="result">
 			Time: <%= t["h"] %> <%= t["ampm"] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
-			<% hour = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
-			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
-			<% today = @forecast.hourly.data.select{ |x| x["time"] == time.to_i }.first %>
-			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
-				<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
-				<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
-				<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
-				<% today["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
+			<% @hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
+			<% @timeLoop =  @date.change({:hour => @hourLoop, :min => 0, :sec => 0}) %>
+			<% @todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i }.first %>
+			<% @yesterdayLoop = @yesterday.hourly.data.select{ |x| x["time"] == (@timeLoop-1.day).to_i }.first %>
+				<% @todayLoop["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
+				<% @todayLoop["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
+				<% @todayLoop["windSpeed"] > 5 ? @gear.wind = true : '' %>
+				<% @todayLoop["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
-					<li>Summary: <%= today["summary"] %></li>
-					<li>Temperature: <%= today["temperature"].round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(today["precipProbability"].to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= today["windSpeed"] %> MPH</li>
-					<li>Icon: <%= today["icon"] %></li>
+					<li>Summary: <%= @todayLoop["summary"] %></li>
+					<li>Temperature: <%= @todayLoop["temperature"].round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(@todayLoop["precipProbability"].to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= @todayLoop["windSpeed"] %> MPH</li>
+					<li>Icon: <%= @todayLoop["icon"] %></li>
 				</ul>
 			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
 				<ul>
-					<li>Summary: <%= yesterday["summary"] %></li>
-					<li>Temperature: <%= yesterday["temperature"].round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= yesterday["windSpeed"] %> MPH</li>
-					<li>Icon: <%= yesterday["icon"] %></li>
+					<li>Summary: <%= @yesterdayLoop["summary"] %></li>
+					<li>Temperature: <%= @yesterdayLoop["temperature"].round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(@yesterdayLoop.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= @yesterdayLoop["windSpeed"] %> MPH</li>
+					<li>Icon: <%= @yesterdayLoop["icon"] %></li>
 				</ul>
 		</div>
 		<br/><br/>
@@ -44,40 +44,33 @@
 <% else %>
 	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
 	<% params[:times].each do |array, t| %>
-	<% puts "--------------------------- Loop Start" %>
 		<div class="result">
-	<% puts "--------------------------- Display Time" %>
 			Time: <%= t["h"] %> <%= t["ampm"] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
-	<% puts "--------------------------- Calculate Hour" %>
-			<% hour = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
-			<% puts "--------------------------- Calculate Time" %>
-			<% time =  @date.change({:hour => hour, :min => 0, :sec => 0}) %>
-			<% puts "--------------------------- Get Today " %>
-			<% today = @forecast.hourly.data.select{ |x| x["time"] == time.to_i }.first %>
-			<% puts "--------------------------- Get Yesterday " %>
-			<% yesterday = @yesterday.hourly.data.select{ |x| x["time"] == (time-1.day).to_i }.first %>
-			<% puts "--------------------------- Gear Checks" %>
-			<% puts today.to_json %>
-			<% today["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
-			<% today["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
-			<% today["windSpeed"] > 5 ? @gear.wind = true : '' %>
-			<% today["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
+			<% @hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
+			<% @timeLoop =  @date.change({:hour => @hourLoop, :min => 0, :sec => 0}) %>
+			<% @todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i }.first %>
+			<% @yesterdayLoop = @yesterday.hourly.data.select{ |x| x["time"] == (@timeLoop-1.day).to_i }.first %>
+			<% puts @todayLoop.to_json %>
+			<% @todayLoop["precipProbability"].to_f*100 > 50 ? @gear.rain = true : '' %>
+			<% @todayLoop["precipProbability"].to_f*100 > 50 ? @gear.goggles = true : '' %>
+			<% @todayLoop["windSpeed"] > 5 ? @gear.wind = true : '' %>
+			<% @todayLoop["cloudCover"].to_f*100 < 40 ? @gear.sunglasses = true : '' %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
-					<li>Summary: <%= today["summary"] %></li>
-					<li>Temperature: <%= today["temperature"].round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(today["precipProbability"].to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= today["windSpeed"] %> MPH</li>
-					<li>Icon: <%= today["icon"] %></li>
+					<li>Summary: <%= @todayLoop["summary"] %></li>
+					<li>Temperature: <%= @todayLoop["temperature"].round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(@todayLoop["precipProbability"].to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= @todayLoop["windSpeed"] %> MPH</li>
+					<li>Icon: <%= @todayLoop["icon"] %></li>
 				</ul>
 			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
 				<ul>
-					<li>Summary: <%= yesterday["summary"] %></li>
-					<li>Temperature: <%= yesterday["temperature"].round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= yesterday["windSpeed"] %> MPH</li>
-					<li>Icon: <%= yesterday["icon"] %></li>
+					<li>Summary: <%= @yesterdayLoop["summary"] %></li>
+					<li>Temperature: <%= @yesterdayLoop["temperature"].round %>°</li>
+					<li>Percipitation Chance: <%= number_to_percentage(@yesterdayLoop.precipProbability.to_f*100, :precision => 0) %></li>
+					<li>Wind Speed: <%= @yesterdayLoop["windSpeed"] %> MPH</li>
+					<li>Icon: <%= @yesterdayLoop["icon"] %></li>
 				</ul>
 		</div>
 		<br/><br/>
