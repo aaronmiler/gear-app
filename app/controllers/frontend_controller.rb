@@ -50,6 +50,7 @@ class FrontendController < ApplicationController
 			time: @date-1.day
 		)
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
+		render json: @forecast
 	end
 	def multiple_results
 		@locations = session[:results]
