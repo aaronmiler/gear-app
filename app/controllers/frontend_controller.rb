@@ -28,12 +28,12 @@ class FrontendController < ApplicationController
 		@search = @search.first.data
 		@timezone = Eztz.timezone(lat: @search['geometry']['location']['lat'], lng: @search['geometry']['location']['lng'])
 		if session[:date]
-			@date = DateTime.parse(session[:date]).midnight
+			@date = DateTime.parse(session[:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 		else
 			if params[:date][:date] != ""
-				@date = DateTime.parse(params[:date][:date]).midnight
+				@date = DateTime.parse(params[:date][:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 			else
-				@date = DateTime.now.midnight
+				@date = DateTime.now.new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 			end
 			@times = params[:times]
 		end
@@ -53,7 +53,7 @@ class FrontendController < ApplicationController
 
 		params[:times].each do |array, t|
 			@hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i
-			@timeLoop =  @date.change({:hour => @hourLoop})
+			@timeLoop =  @date.change({:hour => @hourLoop}).to_i
 			@todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop }
 			render json: {time: @timeLoop , forecast: @forecast}
 		end
