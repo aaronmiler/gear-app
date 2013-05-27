@@ -2,6 +2,8 @@ class FrontendController < ApplicationController
 	require 'forecast_io'
 	require 'ostruct'
 	require 'tzinfo'
+	require 'time'
+	require 'date'
 
 
 	def index

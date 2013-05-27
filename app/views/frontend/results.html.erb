@@ -15,13 +15,14 @@
 			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
 			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time =  @date.change({:hour => hour}).to_time.round(1.hour) %>
+			<% time =  @date.change({:hour => hour}).to_time %>
+			<% time = Time.new(time.year, time.month, time.day, time.hour, time.min, time.sec, time.zone).round(1.hour) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : @gear.goggles = false %>
-			<% today.windSpeed > 5 ? @gear.wind = true : @gear.wind = false %>
-			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : @gear.sunglasses = false %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
+			<% today.windSpeed > 5 ? @gear.wind = true : "" %>
+			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
 
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
@@ -49,13 +50,14 @@
 			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
 			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time =  @date.change({:hour => hour}).to_time.round(1.hour) %>
+			<% time = @date.change({:hour => hour}).to_time %>
+			<% time = Time.new(time.year, time.month, time.day, time.hour, time.min, time.sec, time.zone).round(1.hour) %>
 			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : @gear.rain = false %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : @gear.goggles = false %>
-			<% today.windSpeed > 5 ? @gear.wind = true : @gear.wind = false %>
-			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : @gear.sunglasses = false %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
+			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
+			<% today.windSpeed > 5 ? @gear.wind = true : "" %>
+			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
 			<%= @date.today? ? 'Today:' : 'Day of:' %> 
 				<ul>
 					<li>Summary: <%= today.summary %></li>
