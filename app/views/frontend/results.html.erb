@@ -53,8 +53,8 @@
 			<!-- # Calculations going on here, setting variables and what no to get data -->			
 			<% @hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i %>
 			<% @timeLoop =  @date.change({:hour => @hourLoop, :min => 0, :sec => 0}) %>
-			<% @todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i } %>
-			<% @yesterdayLoop = @yesterday.hourly.data.select{ |x| x["time"] == (@timeLoop-1.day).to_i } %>
+			<% @todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop.to_i }.first %>
+			<% @yesterdayLoop = @yesterday.hourly.data.select{ |x| x["time"] == (@timeLoop-1.day).to_i }.first %>
 			<% puts "------------------- Rain"%>
 				<% @todayLoop.precipProbability.to_f*100 > 50 %>
 				<% puts "------------------- Goggles"%>
