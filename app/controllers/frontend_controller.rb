@@ -51,6 +51,12 @@ class FrontendController < ApplicationController
 		)
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
 
+		params[:times].each do |array, t|
+			@hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i
+			@timeLoop =  @date.change({:hour => @hourLoop})
+			@todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop }
+			render json: {time: @timeLoop.round(1.hour) , forecast: @forecast}
+		end
 	end
 	def multiple_results
 		@locations = session[:results]
