@@ -17,7 +17,7 @@ class FrontendController < ApplicationController
 			session[:results] = @search
 			session[:times] = params[:times]
 			if !params[:date] || params[:date][:date] == ""
-				session[:date] = Time.now.to_s
+				session[:date] = DateTime.now.to_s
 			else
 				session[:date] = params[:date][:date]
 			end
@@ -28,12 +28,12 @@ class FrontendController < ApplicationController
 		@search = @search.first.data
 		@timezone = Eztz.timezone(lat: @search['geometry']['location']['lat'], lng: @search['geometry']['location']['lng'])
 		if session[:date]
-			@date = Time.parse(session[:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+			@date = DateTime.parse(session[:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 		else
 			if params[:date][:date] != ""
-				@date = Time.parse(params[:date][:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.parse(params[:date][:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 			else
-				@date = Time.now.new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.now.new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
 			end
 			@times = params[:times]
 		end
@@ -51,12 +51,6 @@ class FrontendController < ApplicationController
 		)
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,)
 
-		params[:times].each do |array, t|
-			@hourLoop = t["ampm"] == 'PM' ? t["h"].to_i + 12 : t["h"].to_i
-			@timeLoop =  @date.change({:hour => @hourLoop})
-			@todayLoop = @forecast.hourly.data.select{ |x| x["time"] == @timeLoop }
-			render json: {time: @timeLoop.round(1.hour) , forecast: @forecast}
-		end
 	end
 	def multiple_results
 		@locations = session[:results]
