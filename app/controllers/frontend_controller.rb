@@ -28,17 +28,19 @@ class FrontendController < ApplicationController
 		end
 
 		@search = @search.first.data
-		@timezone = Eztz.timezone(lat: @search['geometry']['location']['lat'], lng: @search['geometry']['location']['lng'])
+		# @timezone = Eztz.timezone(lat: @search['geometry']['location']['lat'], lng: @search['geometry']['location']['lng'])
 		if session[:date]
-			@date = DateTime.parse(session[:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+			@date = DateTime.parse(session[:date]).midnight.utc
 		else
 			if params[:date][:date] != ""
-				@date = DateTime.parse(params[:date][:date]).new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.parse(params[:date][:date]).midnight.utc
 			else
-				@date = DateTime.now.new_offset(((@timezone.rawOffset + @timezone.dstOffset)/60/60)/24).midnight
+				@date = DateTime.now.midnight.utc
 			end
 			@times = params[:times]
 		end
+		puts "First Date ========================"
+		puts @date
 
 		# Get the Forecasts for the selected dat, and the previous
 		@forecast = Forecast::IO.forecast(
@@ -51,6 +53,11 @@ class FrontendController < ApplicationController
 			@search['geometry']['location']['lng'],
 			time: @date-1.day
 		)
+
+				@date.new_offset(@forecast.offset).midnight
+
+		puts "Second Date ========================"
+		puts @date
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
 
 	end
