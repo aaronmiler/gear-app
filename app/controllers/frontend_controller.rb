@@ -58,6 +58,17 @@ class FrontendController < ApplicationController
 
 		puts "Second Date ========================"
 		puts @date
+
+		params[:times].each do |array, t| 
+				hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i 
+				time = @date.change({:hour => hour}).to_time 
+				time = Time.new(time.year, time.month, time.day, time.hour, time.min, time.sec).utc.round(1.hour) 
+				today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first 
+				puts "Loop Time =========================="
+				puts time
+				puts time.to_i
+				puts today
+			end
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
 
 	end
