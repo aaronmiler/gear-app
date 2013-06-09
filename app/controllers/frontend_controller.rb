@@ -28,47 +28,44 @@ class FrontendController < ApplicationController
 		end
 
 		@search = @search.first.data
+		lat = @search['geometry']['location']['lat']
+		lon = @search['geometry']['location']['lng']
 		# @timezone = Eztz.timezone(lat: @search['geometry']['location']['lat'], lng: @search['geometry']['location']['lng'])
+		@timezone = Timezone::Zone.new :latlon => [lat,lon]
 		if session[:date]
-			@date = DateTime.parse(session[:date]).midnight.utc
+			@date = DateTime.parse(session[:date]).in_time_zone(@timezone.zone).midnight
 		else
 			if params[:date][:date] != ""
-				@date = DateTime.parse(params[:date][:date]).midnight.utc
+				@date = DateTime.parse(params[:date][:date]).in_time_zone(@timezone.zone).midnight
 			else
-				@date = DateTime.now.midnight.utc
+				@date = DateTime.now.in_time_zone(@timezone.zone).midnight
 			end
 			@times = params[:times]
 		end
 		puts "First Date ========================"
 		puts @date
 
-		# Get the Forecasts for the selected dat, and the previous
+		# Get Timezone
 		@forecast = Forecast::IO.forecast(
-			@search['geometry']['location']['lat'],
-			@search['geometry']['location']['lng'],
-			time: @date
-		)
-		@yesterday = Forecast::IO.forecast(
-			@search['geometry']['location']['lat'],
-			@search['geometry']['location']['lng'],
-			time: @date-1.day
+			lat,
+			lon,
+			time: @date.midnight.to_i
 		)
 
-				@date.new_offset(@forecast.offset).midnight
+		@yesterday = Forecast::IO.forecast(
+			lat,
+			lon,
+			time: (@date.midnight-1.day).to_i
+		)
 
 		puts "Second Date ========================"
 		puts @date
 
-		params[:times].each do |array, t| 
-				hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i 
-				time = @date.change({:hour => hour}).to_time 
-				time = Time.new(time.year, time.month, time.day, time.hour, time.min, time.sec).utc.round(1.hour) 
-				today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first 
-				puts "Loop Time =========================="
-				puts time
-				puts time.to_i
-				puts today
-			end
+
+		@forecast.hourly.data.each.with_index do |f, index|
+			puts '----- Index ' + index.to_s
+			puts DateTime.strptime(f.time.to_s,'%s').to_formatted_s(:short)
+		end
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
 
 	end

@@ -60,5 +60,8 @@ module WeatherOrNot
     config.assets.version = '1.0'
 
     Forecast::IO.api_key = "492624da029f2818994d4c71db8b7fa9"
+    Timezone::Configure.begin do |c|
+      c.username = 'aaronmiler'
+    end
   end
 end
