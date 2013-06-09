@@ -51,7 +51,7 @@ gem 'forecast_io'
 gem 'certified'
 gem 'turbolinks'
 
-gem 'capistrano'
+gem 'capistrano', '2.15.4'
 gem 'rvm-capistrano'
 
 gem 'libv8'
