@@ -2,4 +2,4 @@
 
 This application is intended to give a person riding their bike, an idea of what gear to bring. Using the Forecast API it checks for the weather, and then makes recommendations on what gear to bring.
 
-Can be seen working at (bike.labs.aaronmiler.com)[http://bike.labs.aaronmiler.com]
+Can be seen working at bike.labs.aaronmiler.com[http://bike.labs.aaronmiler.com]
