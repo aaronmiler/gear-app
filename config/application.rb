@@ -59,9 +59,9 @@ module WeatherOrNot
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    Forecast::IO.api_key = ENV["weather_api"]
+    Forecast::IO.api_key = ENV["WEATHER_API"]
     Timezone::Configure.begin do |c|
-      c.username = ENV["timezone_user"]
+      c.username = ENV["TIMEZONE_USER"]
     end
   end
 end
