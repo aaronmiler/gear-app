@@ -1,91 +1,80 @@
 <h2>Location: 
-<%= @search['address_components'].select{ |x| x['types'] == ['locality','political']}.first['short_name'] %>,
-<% unless @search['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']} %> 
-	<%= @search['address_components'].select{ |x| x['types'] == ['administrative_area_level_1','political']}.first['short_name'] %>
-<% else %>
-	<%= @search['address_components'].select{ |x| x['types'] == ['country','political']}.first['short_name'] %>
-<% end %>
+<%= Functions.getLocation(@search) %>
 </h2>
-<div id="map-canvas" style="width:100%;height:250px;"></div>
-<a href="/">Go Again</a>
-<% if session[:times] %>
-	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
-	<% session[:times].each do |array, t| %>
-		<div class="result">
-			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
-			<!-- # Calculations going on here, setting variables and what no to get data -->			
-			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time =  @date.change({:hour => hour}).to_time %>
-			<% puts " View Time =====================" %>
-			<% puts time %>
-			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
-			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
-			<% today.windSpeed > 5 ? @gear.wind = true : "" %>
-			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
-			<% today.temperature.round < 50 ? @gear.warm = true : "" %>
-
-			<%= @date.today? ? 'Today:' : 'Day of:' %> 
-				<ul>
-					<li>Summary: <%= today.summary %></li>
-					<li>Temperature: <%= today.temperature.round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= today.windSpeed %> MPH</li>
-					<li>Icon: <%= today.icon %></li>
-				</ul>
-			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
-				<ul>
-					<li>Summary: <%= yesterday.summary %></li>
-					<li>Temperature: <%= yesterday.temperature.round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
-					<li>Icon: <%= yesterday.icon %></li>
-				</ul>
-		</div>
-		<br/><br/>
+<div class="row-fluid">
+	<div class="span12">
+		<div id="map-canvas" style="width:100%;height:250px;"></div>
+	</div>
+	<a href="/">Go Again</a>
+</div>
+<div class="row-fluid">
+	<div class="span3">
+		<h3>You should bring</h3>
+		<h5>A Helmet</h5>
+		<%= @gear.rain ? "<h5>Rain Gear</h5>".html_safe : "" %>
+		<%= @gear.goggles ? "<h5>Goggles</h5>".html_safe : "" %>
+		<%= @gear.wind ? "<h5>Windproof Apparael</h5>".html_safe : "" %>
+		<%= @gear.sunglasses ? "<h5>Sunglasses</h5>".html_safe : "" %>
+	</div>
+	<div class="span9">
+		<% if session[:times] %>
+			<% @times = session[:times] %>
+		<% else %>
+			<% @times = params[:times] %>
 		<% end %>
-<% else %>
-	<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
-	<% params[:times].each do |array, t| %>
-		<div class="result">
-			Time: <%= t['h'] %> <%= t['ampm'] %> <br/>
-			<!-- # Calculations going on here, setting variables and what no to get data -->			
-			<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
-			<% time = @date.change({:hour => hour}).to_time %>
-			<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
-			<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time.to_i - 1.day)}.first %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
-			<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
-			<% today.windSpeed > 5 ? @gear.wind = true : "" %>
-			<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
-			<% today.temperature.round < 50 ? @gear.warm = true : "" %>
-			<%= @date.today? ? 'Today:' : 'Day of:' %> 
-				<ul>
-					<li>Summary: <%= today.summary %></li>
-					<li>Temperature: <%= today.temperature.round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= today.windSpeed %> MPH</li>
-					<li>Icon: <%= today.icon %></li>
-				</ul>
-			<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
-				<ul>
-					<li>Summary: <%= yesterday.summary %></li>
-					<li>Temperature: <%= yesterday.temperature.round %>°</li>
-					<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
-					<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
-					<li>Icon: <%= yesterday.icon %></li>
-				</ul>
-		</div>
-		<br/><br/>
-	<% end %>
-<% end %>
-<div style="position:fixed;left:0;top:25px;width:250px;padding:10px;">
-	<h3>You should bring</h3>
-	<%= @gear.rain ? "<h5>Rain Gear</h5>".html_safe : "" %>
-	<%= @gear.goggles ? "<h5>Goggles</h5>".html_safe : "" %>
-	<%= @gear.wind ? "<h5>Windproof Apparel</h5>".html_safe : "" %>
-	<%= @gear.sunglasses ? "<h5>Sunglasses</h5>".html_safe : "" %>
+		<% if @date.today? %>
+			<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %> (Today)</h3>
+		<% else %>
+			<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
+		<% end %>
+		<% @times.each do |array, t| %>
+			<% puts "IN VIEW ================" %>
+			<% puts t %>
+			<div class="result row-fluid">
+				<div class="span12">
+					<h4>Time: <%= t['h'] %> <%= t['ampm'] %></h4>
+				</div>
+				<!-- # Calculations going on here, setting variables and what no to get data -->
+				<% hour = t['ampm'] == 'PM' ? t['h'].to_i + 12 : t['h'].to_i %>
+				<% if hour == 12 %>
+					<% hour = 0 %>
+				<% elsif hour == 24 %>
+					<% hour = 12 %>
+				<% end %>
+				<% time =  @date.in_time_zone(@timezone.zone).change({:hour => hour}).to_time %>
+
+				<% puts time.in_time_zone(@timezone.zone) %>
+
+				<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
+				<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
+				<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
+				<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
+				<% today.windSpeed > 5 ? @gear.wind = true : "" %>
+				<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
+				<% today.temperature.round < 50 ? @gear.warm = true : "" %>
+				<div class="span6" style="margin-left:0px;">					
+					<%= @date.today? ? 'Today:' : 'Day of:' %> 
+					<ul>
+						<li>Summary: <%= today.summary %></li>
+						<li>Temperature: <%= today.temperature.round %>°</li>
+						<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
+						<li>Wind Speed: <%= today.windSpeed %> MPH</li>
+						<li>Icon: <%= today.icon %></li>
+					</ul>
+				</div>
+				<div class="span6">
+					<%= @date.today? ? 'Yesterday:' : 'Previous Day:' %> 
+					<ul>
+						<li>Summary: <%= yesterday.summary %></li>
+						<li>Temperature: <%= yesterday.temperature.round %>°</li>
+						<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
+						<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
+						<li>Icon: <%= yesterday.icon %></li>
+					</ul>
+				</div>
+			</div>
+		<% end %>
+	</div>
 </div>
 <script>
 	var map;

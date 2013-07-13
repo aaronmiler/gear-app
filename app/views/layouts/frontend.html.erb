@@ -22,14 +22,13 @@
 <body>
 
 <div class="container">
-	<div class="row">
-		<div class="span6 offset4">
-<h1 class="text-center">Weather or Not</h1>
-<%= yield %>
+	<div class="row-fluid">
+		<div class="span12">
+    <h1 class="text-center">Weather or Not</h1>
+    <%= yield %>
+    </div>
+  </div>
 </div>
-</div>
-</div>
-  <%= javascript_include_tag "application" %>
-
+<%= javascript_include_tag "application" %>
 </body>
 </html>
