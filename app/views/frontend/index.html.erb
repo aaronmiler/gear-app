@@ -1,5 +1,5 @@
 <div class="span6 offset3">
-	<p>Commute by bike? Not Sure why gear to bring? Fill out the following form with the Location, Date, and times you're going to be riding. The application will tell you what gear you should bring based on the forecast.</p>
+	<p>Commute by bike? Not Sure what gear to bring? Fill out the following form with the Location, Date, and times you're going to be riding. The application will suggest gear for you to bring based on the forecast.</p>
 	<%= form_tag '/results', :method => "get", :class => 'text-center' do |f| %>
 		<%= text_field_tag :location,"", :placeholder => "Location - Required", class: 'input-block-level' %><br/>
 		<%= text_field "date", :date, :data => {:behaviour => "datepicker"}, :placeholder => "Today", class: 'input-block-level'  %></br>
