@@ -56,5 +56,4 @@ gem 'capistrano', '2.15.4'
 gem 'rvm-capistrano'
 
 gem 'libv8'
-
-gem 'webrick', '1.3.1'
+gem 'figaro'
