@@ -61,7 +61,8 @@ class FrontendController < ApplicationController
 			puts '----- Index ' + index.to_s
 			puts DateTime.strptime(f.time.to_s,'%s').in_time_zone(@timezone.zone).to_formatted_s(:short)
 		end
-		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
+
+		@gear = Functions.gearcheck(@forecast.hourly.data)
 
 	end
 	def multiple_results

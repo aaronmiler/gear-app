@@ -47,11 +47,6 @@
 
 				<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 				<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>
-				<% today.precipProbability.to_f*100 > 50 ? @gear.rain = true : "" %>
-				<% today.precipProbability.to_f*100 > 50 ? @gear.goggles = true : "" %>
-				<% today.windSpeed > 5 ? @gear.wind = true : "" %>
-				<% today.cloudCover.to_f*100 < 40 ? @gear.sunglasses = true : "" %>
-				<% today.temperature.round < 50 ? @gear.warm = true : "" %>
 				<div class="span6" style="margin-left:0px;">					
 					<%= @date.today? ? 'Today:' : 'Day of:' %> 
 					<ul>
