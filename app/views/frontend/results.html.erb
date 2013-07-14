@@ -54,7 +54,7 @@
 						<li>Temperature: <%= today.temperature.round %>°</li>
 						<li>Percipitation Chance: <%= number_to_percentage(today.precipProbability.to_f*100, :precision => 0) %></li>
 						<li>Wind Speed: <%= today.windSpeed %> MPH</li>
-						<li>Icon: <%= today.icon %></li>
+						<!-- <li>Icon: <%= today.icon %></li> -->
 					</ul>
 				</div>
 				<div class="span6">
@@ -64,7 +64,7 @@
 						<li>Temperature: <%= yesterday.temperature.round %>°</li>
 						<li>Percipitation Chance: <%= number_to_percentage(yesterday.precipProbability.to_f*100, :precision => 0) %></li>
 						<li>Wind Speed: <%= yesterday.windSpeed %> MPH</li>
-						<li>Icon: <%= yesterday.icon %></li>
+						<!-- <li>Icon: <%= yesterday.icon %></li> -->
 					</ul>
 				</div>
 			</div>
