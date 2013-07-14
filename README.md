@@ -6,6 +6,6 @@ The application is currently living at bike.labs.aaronmiler.com[http://bike.labs
 
 This application uses the following services
 
-	- (Google Maps v3)[https://developers.google.com/maps/documentation/javascript/]
-	- Forecast.io[http://forecast.io/]
-	- Geocoder[http://www.rubygeocoder.com/]
+- (Google Maps v3)[https://developers.google.com/maps/documentation/javascript/]
+- Forecast.io[http://forecast.io/]
+- Geocoder[http://www.rubygeocoder.com/]
