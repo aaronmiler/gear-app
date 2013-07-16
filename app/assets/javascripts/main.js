@@ -9,6 +9,7 @@ $('body').on('blur','#location',function(){
 $("[data-behaviour~='datepicker']").datepicker({
     "format": "yyyy-mm-dd",
     "weekStart": 1,
+    "startDate": 'today',
     "autoclose": true
 });
 var time = 1;
