@@ -28,8 +28,6 @@
 			<h3>Selected Date <%= @date.to_date.to_formatted_s(:long_ordinal) %></h3>
 		<% end %>
 		<% @times.each do |array, t| %>
-			<% puts "IN VIEW ================" %>
-			<% puts t %>
 			<div class="result row-fluid">
 				<div class="span12">
 					<h4>Time: <%= t['h'] %> <%= t['ampm'] %></h4>
@@ -43,7 +41,7 @@
 				<% end %>
 				<% time =  @date.in_time_zone(@timezone.zone).change({:hour => hour}).to_time %>
 
-				<% puts time.in_time_zone(@timezone.zone) %>
+
 
 				<% today = @forecast.hourly.data.select{ |x| x['time'] == time.to_i }.first %>
 				<% yesterday = @yesterday.hourly.data.select{ |x| x['time'] == (time-1.day).to_i }.first %>

@@ -62,7 +62,7 @@ class FrontendController < ApplicationController
 			puts DateTime.strptime(f.time.to_s,'%s').in_time_zone(@timezone.zone).to_formatted_s(:short)
 		end
 
-		@gear = Functions.gearcheck(@forecast.hourly.data)
+		@gear = Functions.gearcheck(@forecast.hourly.data,@times)
 
 	end
 	def multiple_results

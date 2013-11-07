@@ -57,3 +57,4 @@ gem 'rvm-capistrano'
 
 gem 'libv8'
 gem 'figaro'
+gem 'newrelic_rpm'

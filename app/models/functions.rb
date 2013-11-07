@@ -16,7 +16,7 @@ class Functions < ActiveRecord::Base
   	end
   	return @place.to_s
   end
-  def self.gearcheck(forecast)
+  def self.gearcheck(forecast,times)
 		@gear = OpenStruct.new(:sunglasses => false,:goggles => false,:rain => false,:wind => false,:warm => false)
 		forecast.each do |today|
 	  	today.precipProbability.to_f*100 > 50 ? @gear.rain = true : ""
